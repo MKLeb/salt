@@ -173,7 +173,7 @@ try:
 except ImportError:
     HAS_LIBS = False
 
-NO_PROFILE_MSG = "No profile found, using a profile is always recommended"
+NO_PROFILE_MSG = "No etcd profile found, using a profile is always recommended"
 
 
 def __virtual__():
@@ -183,6 +183,13 @@ def __virtual__():
     if HAS_LIBS:
         return __virtualname__
     return (False, "Unable to import etcd_util")
+
+
+def _etcd_action(*, action, name, profile, **kwargs):
+    try:
+        return __salt__["etcd.{}".format(action)](name, profile=profile, **kwargs)
+    except Exception:  # pylint: disable=broad-except
+        return None
 
 
 def set_(name, value, profile=None, **kwargs):
@@ -215,7 +222,7 @@ def set_(name, value, profile=None, **kwargs):
         "changes": {},
     }
 
-    current = __salt__["etcd.get"](name, profile=profile, **kwargs)
+    current = _etcd_action(action="get", name=name, profile=profile, **kwargs)
 
     if current is None and profile is None:
         rtn["comment"] = NO_PROFILE_MSG
@@ -225,7 +232,9 @@ def set_(name, value, profile=None, **kwargs):
     if not current:
         created = True
 
-    result = __salt__["etcd.set"](name, value, profile=profile, **kwargs)
+    result = _etcd_action(
+        action="set", name=name, value=value, profile=profile, **kwargs
+    )
 
     if result and result != current:
         if created:
@@ -282,7 +291,9 @@ def directory(name, profile=None, **kwargs):
 
     rtn = {"name": name, "comment": "Directory exists", "result": True, "changes": {}}
 
-    current = __salt__["etcd.get"](name, profile=profile, recurse=True, **kwargs)
+    current = _etcd_action(
+        action="get", name=name, profile=profile, recurse=True, **kwargs
+    )
 
     if current is None and profile is None:
         rtn["comment"] = NO_PROFILE_MSG
@@ -292,7 +303,9 @@ def directory(name, profile=None, **kwargs):
     if not current:
         created = True
 
-    result = __salt__["etcd.set"](name, None, directory=True, profile=profile, **kwargs)
+    result = _etcd_action(
+        action="set", name=name, value=None, directory=True, profile=profile, **kwargs
+    )
 
     if result and result != current:
         if created:
@@ -325,7 +338,7 @@ def rm(name, recurse=False, profile=None, **kwargs):
 
     rtn = {"name": name, "result": True, "changes": {}}
 
-    current = __salt__["etcd.get"](name, profile=profile, recurse=True, **kwargs)
+    current = _etcd_action(action="get", name=name, profile=profile, **kwargs)
 
     if current is None and profile is None:
         rtn["comment"] = NO_PROFILE_MSG
@@ -336,7 +349,7 @@ def rm(name, recurse=False, profile=None, **kwargs):
         rtn["comment"] = "Key does not exist"
         return rtn
 
-    if __salt__["etcd.rm"](name, recurse=recurse, profile=profile, **kwargs):
+    if _etcd_action(action="rm", name=name, recurse=recurse, profile=profile, **kwargs):
         rtn["comment"] = "Key removed"
         rtn["changes"] = {name: "Deleted"}
     else:
