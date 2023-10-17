@@ -226,13 +226,6 @@ def runner_types(ctx: Context, event_name: str):
     ctx.exit(0)
 
 
-class TestRun(TypedDict):
-    type: str
-    skip_code_coverage: bool
-    from_filenames: NotRequired[str]
-    selected_tests: NotRequired[dict[str, bool]]
-
-
 @ci.command(
     name="define-jobs",
     arguments={
@@ -263,7 +256,7 @@ def define_jobs(
     ctx: Context,
     event_name: str,
     changed_files: pathlib.Path,
-    testrun: TestRun,
+    testrun: dict[str, Any],
     skip_tests: bool = False,
     skip_pkg_tests: bool = False,
     skip_pkg_download_tests: bool = False,
@@ -379,7 +372,7 @@ def define_jobs(
     if (
         jobs["test"]
         and required_test_changes == {"false"}
-        and testrun["type"] != "full"
+        and testrun.get("type") != "full"
     ):
         with open(github_step_summary, "a", encoding="utf-8") as wfh:
             wfh.write("De-selecting the 'test' job.\n")
@@ -430,6 +423,13 @@ def define_jobs(
     ctx.info("Writing 'jobs' to the github outputs file")
     with open(github_output, "a", encoding="utf-8") as wfh:
         wfh.write(f"jobs={json.dumps(jobs)}\n")
+
+
+class TestRun(TypedDict):
+    type: str
+    skip_code_coverage: bool
+    from_filenames: NotRequired[str]
+    selected_tests: NotRequired[dict[str, bool]]
 
 
 @ci.command(
