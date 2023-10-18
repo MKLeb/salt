@@ -247,7 +247,7 @@ def runner_types(ctx: Context, event_name: str):
                 "from the 'dorny/paths-filter' GitHub action."
             ),
         },
-        "testrun": {
+        "testrun_type": {
             "help": "Testrun information from `tools ci define-testrun`",
         },
     },
@@ -256,7 +256,7 @@ def define_jobs(
     ctx: Context,
     event_name: str,
     changed_files: pathlib.Path,
-    testrun: dict[str, Any],
+    testrun_type: str,
     skip_tests: bool = False,
     skip_pkg_tests: bool = False,
     skip_pkg_download_tests: bool = False,
@@ -369,11 +369,7 @@ def define_jobs(
         changed_files_contents["workflows"],
         changed_files_contents["golden_images"],
     }
-    if (
-        jobs["test"]
-        and required_test_changes == {"false"}
-        and testrun.get("type") != "full"
-    ):
+    if jobs["test"] and required_test_changes == {"false"} and testrun_type != "full":
         with open(github_step_summary, "a", encoding="utf-8") as wfh:
             wfh.write("De-selecting the 'test' job.\n")
         jobs["test"] = False

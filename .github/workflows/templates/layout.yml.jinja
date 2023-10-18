@@ -265,7 +265,7 @@ jobs:
         run: |
           tools ci define-jobs<{ prepare_workflow_skip_test_suite }><{
             prepare_workflow_skip_pkg_test_suite }><{ prepare_workflow_skip_pkg_download_test_suite
-          }> ${{ github.event_name }} changed-files.json '${{ steps.define-testrun.outputs.testrun }}'
+          }> ${{ github.event_name }} changed-files.json ${{ fromJSON(steps.define-testrun.outputs.testrun)['type'] }}
 
       - name: Check Defined Jobs
         run: |
