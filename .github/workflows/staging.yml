@@ -240,7 +240,7 @@ jobs:
       - name: Define Jobs
         id: define-jobs
         run: |
-          tools ci define-jobs${{ inputs.skip-salt-test-suite && ' --skip-tests' || '' }}${{ inputs.skip-salt-pkg-test-suite && ' --skip-pkg-tests' || '' }}${{ inputs.skip-salt-pkg-download-test-suite && ' --skip-pkg-download-tests' || '' }} ${{ github.event_name }} changed-files.json ${{ fromJSON(steps.define-testrun.outputs.testrun)['type'] }}
+          tools ci define-jobs${{ inputs.skip-salt-test-suite && ' --skip-tests' || '' }}${{ inputs.skip-salt-pkg-test-suite && ' --skip-pkg-tests' || '' }}${{ inputs.skip-salt-pkg-download-test-suite && ' --skip-pkg-download-tests' || '' }}${{ fromJSON(steps.define-testrun.outputs.testrun)['type'] == 'full' && ' --full-testrun' || '' }} ${{ github.event_name }} changed-files.json
 
       - name: Check Defined Jobs
         run: |

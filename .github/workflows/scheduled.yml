@@ -235,7 +235,7 @@ jobs:
       - name: Define Jobs
         id: define-jobs
         run: |
-          tools ci define-jobs ${{ github.event_name }} changed-files.json ${{ fromJSON(steps.define-testrun.outputs.testrun)['type'] }}
+          tools ci define-jobs${{ fromJSON(steps.define-testrun.outputs.testrun)['type'] == 'full' && ' --full-testrun' || '' }} ${{ github.event_name }} changed-files.json
 
       - name: Check Defined Jobs
         run: |
