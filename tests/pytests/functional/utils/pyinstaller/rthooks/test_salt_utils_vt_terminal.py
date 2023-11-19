@@ -21,15 +21,15 @@ def envvar(request):
 @pytest.fixture
 def meipass(envvar):
     with mock.patch("salt.utils.pyinstaller.rthooks._overrides.sys") as patched_sys:
-        patched_sys._MEIPASS = "{}_VALUE".format(envvar)
-        assert overrides.sys._MEIPASS == "{}_VALUE".format(envvar)
-        yield "{}_VALUE".format(envvar)
+        patched_sys._MEIPASS = f"{envvar}_VALUE"
+        assert overrides.sys._MEIPASS == f"{envvar}_VALUE"
+        yield f"{envvar}_VALUE"
     assert not hasattr(sys, "_MEIPASS")
     assert not hasattr(overrides.sys, "_MEIPASS")
 
 
 def test_vt_terminal_environ_cleanup_original(envvar, meipass):
-    orig_envvar = "{}_ORIG".format(envvar)
+    orig_envvar = f"{envvar}_ORIG"
     with PatchedEnviron(**{orig_envvar: meipass}):
         original_env = dict(os.environ)
         assert orig_envvar in original_env
@@ -60,7 +60,7 @@ def test_vt_terminal_environ_cleanup_original(envvar, meipass):
 
 
 def test_vt_terminal_environ_cleanup_original_passed_directly(envvar, meipass):
-    orig_envvar = "{}_ORIG".format(envvar)
+    orig_envvar = f"{envvar}_ORIG"
     env = {
         orig_envvar: meipass,
     }
