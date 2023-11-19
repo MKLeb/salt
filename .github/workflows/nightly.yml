@@ -509,7 +509,7 @@ jobs:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
       self-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['self-hosted'] }}
       github-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['github-hosted'] }}
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
 
   build-deps-onedir-windows:
@@ -523,7 +523,7 @@ jobs:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
       self-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['self-hosted'] }}
       github-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['github-hosted'] }}
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
 
   build-deps-onedir-macos:
@@ -537,7 +537,7 @@ jobs:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
       self-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['self-hosted'] }}
       github-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['github-hosted'] }}
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
 
   build-salt-onedir-linux:
@@ -553,7 +553,7 @@ jobs:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
       self-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['self-hosted'] }}
       github-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['github-hosted'] }}
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
 
   build-salt-onedir-windows:
@@ -569,7 +569,7 @@ jobs:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
       self-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['self-hosted'] }}
       github-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['github-hosted'] }}
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
 
   build-salt-onedir-macos:
@@ -585,7 +585,7 @@ jobs:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
       self-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['self-hosted'] }}
       github-hosted-runners: ${{ fromJSON(needs.prepare-workflow.outputs.runners)['github-hosted'] }}
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
 
   build-rpm-pkgs-onedir:
@@ -597,7 +597,7 @@ jobs:
     uses: ./.github/workflows/build-rpm-packages.yml
     with:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
       source: "onedir"
 
@@ -610,7 +610,7 @@ jobs:
     uses: ./.github/workflows/build-rpm-packages.yml
     with:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
       source: "src"
 
@@ -623,7 +623,7 @@ jobs:
     uses: ./.github/workflows/build-deb-packages.yml
     with:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
       source: "onedir"
 
@@ -636,7 +636,7 @@ jobs:
     uses: ./.github/workflows/build-deb-packages.yml
     with:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
       source: "src"
 
@@ -649,7 +649,7 @@ jobs:
     uses: ./.github/workflows/build-windows-packages.yml
     with:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
       source: "onedir"
       environment: nightly
@@ -665,7 +665,7 @@ jobs:
     uses: ./.github/workflows/build-windows-packages.yml
     with:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
       source: "src"
       environment: nightly
@@ -681,7 +681,7 @@ jobs:
     uses: ./.github/workflows/build-macos-packages.yml
     with:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
       source: "onedir"
       environment: nightly
@@ -697,7 +697,7 @@ jobs:
     uses: ./.github/workflows/build-macos-packages.yml
     with:
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
-      relenv-version: "0.14.1"
+      relenv-version: "0.14.2"
       python-version: "3.10.13"
       source: "src"
       environment: nightly
@@ -1529,6 +1529,28 @@ jobs:
       nox-session: ci-test-onedir
       platform: linux
       arch: x86_64
+      salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
+      pkg-type: rpm
+      nox-version: 2022.8.7
+      python-version: "3.10"
+      cache-prefix: ${{ needs.prepare-workflow.outputs.cache-seed }}|3.10.13
+      skip-code-coverage: false
+      skip-junit-reports: false
+      testing-releases: ${{ needs.prepare-workflow.outputs.testing-releases }}
+
+  centosstream-9-arm64-pkg-tests:
+    name: CentOS Stream 9 Arm64 Package Test
+    if: ${{ fromJSON(needs.prepare-workflow.outputs.jobs)['test-pkg'] && fromJSON(needs.prepare-workflow.outputs.runners)['self-hosted'] }}
+    needs:
+      - prepare-workflow
+      - build-rpm-pkgs-onedir
+      - centosstream-9-arm64-ci-deps
+    uses: ./.github/workflows/test-packages-action.yml
+    with:
+      distro-slug: centosstream-9-arm64
+      nox-session: ci-test-onedir
+      platform: linux
+      arch: aarch64
       salt-version: "${{ needs.prepare-workflow.outputs.salt-version }}"
       pkg-type: rpm
       nox-version: 2022.8.7
@@ -3206,11 +3228,19 @@ jobs:
           - pkg-type: rpm
             distro: amazon
             version: "2"
+            arch: arm64
+          - pkg-type: rpm
+            distro: amazon
+            version: "2"
             arch: aarch64
           - pkg-type: rpm
             distro: amazon
             version: "2023"
             arch: x86_64
+          - pkg-type: rpm
+            distro: amazon
+            version: "2023"
+            arch: arm64
           - pkg-type: rpm
             distro: amazon
             version: "2023"
@@ -3219,6 +3249,10 @@ jobs:
             distro: redhat
             version: "7"
             arch: x86_64
+          - pkg-type: rpm
+            distro: redhat
+            version: "7"
+            arch: arm64
           - pkg-type: rpm
             distro: redhat
             version: "7"
@@ -3227,6 +3261,10 @@ jobs:
             distro: redhat
             version: "8"
             arch: x86_64
+          - pkg-type: rpm
+            distro: redhat
+            version: "8"
+            arch: arm64
           - pkg-type: rpm
             distro: redhat
             version: "8"
@@ -3235,6 +3273,10 @@ jobs:
             distro: redhat
             version: "9"
             arch: x86_64
+          - pkg-type: rpm
+            distro: redhat
+            version: "9"
+            arch: arm64
           - pkg-type: rpm
             distro: redhat
             version: "9"
@@ -3243,6 +3285,10 @@ jobs:
             distro: fedora
             version: "36"
             arch: x86_64
+          - pkg-type: rpm
+            distro: fedora
+            version: "36"
+            arch: arm64
           - pkg-type: rpm
             distro: fedora
             version: "36"
@@ -3251,6 +3297,10 @@ jobs:
             distro: fedora
             version: "37"
             arch: x86_64
+          - pkg-type: rpm
+            distro: fedora
+            version: "37"
+            arch: arm64
           - pkg-type: rpm
             distro: fedora
             version: "37"
@@ -3259,6 +3309,10 @@ jobs:
             distro: fedora
             version: "38"
             arch: x86_64
+          - pkg-type: rpm
+            distro: fedora
+            version: "38"
+            arch: arm64
           - pkg-type: rpm
             distro: fedora
             version: "38"
@@ -3267,6 +3321,10 @@ jobs:
             distro: photon
             version: "3"
             arch: x86_64
+          - pkg-type: rpm
+            distro: photon
+            version: "3"
+            arch: arm64
           - pkg-type: rpm
             distro: photon
             version: "3"
@@ -3275,6 +3333,10 @@ jobs:
             distro: photon
             version: "4"
             arch: x86_64
+          - pkg-type: rpm
+            distro: photon
+            version: "4"
+            arch: arm64
           - pkg-type: rpm
             distro: photon
             version: "4"
@@ -3283,6 +3345,10 @@ jobs:
             distro: photon
             version: "5"
             arch: x86_64
+          - pkg-type: rpm
+            distro: photon
+            version: "5"
+            arch: arm64
           - pkg-type: rpm
             distro: photon
             version: "5"
@@ -3308,7 +3374,7 @@ jobs:
       - name: Download RPM Packages
         uses: actions/download-artifact@v3
         with:
-          name: salt-${{ needs.prepare-workflow.outputs.salt-version }}-${{ matrix.arch }}-rpm
+          name: salt-${{ needs.prepare-workflow.outputs.salt-version }}-${{ matrix.arch == 'arm64' && 'aarch64' || matrix.arch }}-rpm
           path: artifacts/pkgs/incoming
 
       - name: Setup GnuPG
@@ -3822,6 +3888,7 @@ jobs:
       - centos-7-pkg-tests
       - centosstream-8-pkg-tests
       - centosstream-9-pkg-tests
+      - centosstream-9-arm64-pkg-tests
       - debian-10-pkg-tests
       - debian-11-pkg-tests
       - debian-11-arm64-pkg-tests
